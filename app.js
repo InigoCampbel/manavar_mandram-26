@@ -363,19 +363,19 @@ function attachMessageListeners(msg) {
     if (isAdmin) {
         let pressTimer;
         
-        messageCard.addEventListener('touchstart', (e) => {
+        const startPress = (e) => {
             pressTimer = setTimeout(() => {
                 handleDeleteMessage(msg.id);
             }, 600);
-        });
+        };
         
-        messageCard.addEventListener('touchend', () => {
+        const cancelPress = () => {
             clearTimeout(pressTimer);
-        });
+        };
         
-        messageCard.addEventListener('touchmove', () => {
-            clearTimeout(pressTimer);
-        });
+        messageCard.addEventListener('touchstart', startPress);
+        messageCard.addEventListener('touchend', cancelPress);
+        messageCard.addEventListener('touchmove', cancelPress);
         
         messageCard.addEventListener('contextmenu', (e) => {
             e.preventDefault();
