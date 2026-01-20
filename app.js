@@ -241,10 +241,10 @@ async function silentRefresh() {
             
             // Restore exact scroll position (only auto-scroll if user was at bottom)
             if (wasAtBottom) {
-                scrollToBottom();
-            } else {
-                window.scrollTo(0, scrollPos);
-            }
+    scrollToBottom();
+} else {
+    messagesContainer.scrollTo(0, scrollPos);
+}
         }
         
     } catch (error) {
@@ -394,10 +394,10 @@ function renderMessages() {
     });
     
     if (wasAtBottom) {
-        scrollToBottom();
-    } else {
-        window.scrollTo(0, scrollPos);
-    }
+    scrollToBottom();
+} else {
+    messagesContainer.scrollTo(0, scrollPos);
+}
 }
 
 // Create message HTML
@@ -621,18 +621,17 @@ async function handleVote(messageId, voteType) {
     }
 }
 
-// Utility functions
 function isScrolledToBottom() {
     const threshold = 150;
-    const position = window.scrollY + window.innerHeight;
-    const height = document.documentElement.scrollHeight;
+    const position = messagesContainer.scrollTop + messagesContainer.clientHeight;
+    const height = messagesContainer.scrollHeight;
     return position >= height - threshold;
 }
 
 function scrollToBottom() {
     setTimeout(() => {
-        window.scrollTo({
-            top: document.documentElement.scrollHeight,
+        messagesContainer.scrollTo({
+            top: messagesContainer.scrollHeight,
             behavior: 'smooth'
         });
     }, 100);
