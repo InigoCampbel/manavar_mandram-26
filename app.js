@@ -342,49 +342,37 @@ function toggleSort() {
     renderMessages();
 }
 
-// Render all messages
 function renderMessages() {
     const wasAtBottom = isScrolledToBottom();
     const scrollPos = messagesContainer.scrollTop;
     
     let displayMessages = [...messages];
     
+    // NEW: Separate questions from regular messages
+    const questions = displayMessages.filter(msg => msg.is_question);
+    const regularMessages = displayMessages.filter(msg => !msg.is_question);
+    
+    // NEW: Get the latest question
+    const latestQuestion = questions.length > 0 ? questions[questions.length - 1] : null;
+    
+    // NEW: Sort regular messages if vote sorting is enabled
+    let sortedRegularMessages = regularMessages;
     if (sortByVotes) {
-        const grouped = [];
-        let currentGroup = [];
-        
-        displayMessages.forEach(msg => {
-            if (msg.is_question) {
-                if (currentGroup.length > 0) {
-                    grouped.push(currentGroup);
-                    currentGroup = [];
-                }
-                grouped.push([msg]);
-            } else {
-                currentGroup.push(msg);
-            }
-        });
-        
-        if (currentGroup.length > 0) {
-            grouped.push(currentGroup);
-        }
-        
-        displayMessages = grouped.flatMap(group => {
-            if (group[0]?.is_question) {
-                return group;
-            } else {
-                return group.sort((a, b) => {
-                    const aScore = a.upvotes - a.downvotes;
-                    const bScore = b.upvotes - b.downvotes;
-                    return bScore - aScore;
-                });
-            }
+        sortedRegularMessages = [...regularMessages].sort((a, b) => {
+            const aScore = a.upvotes - a.downvotes;
+            const bScore = b.upvotes - b.downvotes;
+            return bScore - aScore;
         });
     }
     
-    messagesContainer.innerHTML = displayMessages.map(msg => createMessageHTML(msg)).join('');
+    // NEW: Build final display order - latest question first, then regular messages
+    const finalMessages = latestQuestion 
+        ? [latestQuestion, ...sortedRegularMessages]
+        : sortedRegularMessages;
     
-    displayMessages.forEach(msg => {
+    messagesContainer.innerHTML = finalMessages.map(msg => createMessageHTML(msg)).join('');
+    
+    finalMessages.forEach(msg => {
         attachMessageListeners(msg);
     });
     
@@ -398,8 +386,13 @@ function createMessageHTML(msg) {
     const userVote = userVotes[msg.id];
     const isQuestion = msg.is_question;
     
+    // NEW: Check if this is the pinned question
+    const questions = messages.filter(m => m.is_question);
+    const latestQuestion = questions.length > 0 ? questions[questions.length - 1] : null;
+    const isPinned = isQuestion && latestQuestion && msg.id === latestQuestion.id;
+    
     return `
-        <div class="message-card ${isQuestion ? 'question' : ''}" data-id="${msg.id}" ${!isQuestion ? `data-user-message="true" ${userVote === 'upvote' ? 'data-voted="true"' : ''}` : 'data-admin-message="true"'}>
+        <div class="message-card ${isQuestion ? 'question' : ''} ${isPinned ? 'pinned' : ''}" data-id="${msg.id}" ${!isQuestion ? `data-user-message="true" ${userVote === 'upvote' ? 'data-voted="true"' : ''}` : 'data-admin-message="true"'}>
             <div class="message-content">
                 ${msg.content}
                 <div class="message-bottom-bar">
