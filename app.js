@@ -102,12 +102,7 @@ async function handleLogin() {
         alert('Roll number must be exactly 8 digits');
         return;
     }
-    
-    // To this:
-    if (roll.length !== 8) {
-        alert('Roll number must be exactly 8 characters');
-        return;
-    }
+
     
     currentUser = { name, roll_number: roll };
     localStorage.setItem('discussionUser', JSON.stringify(currentUser));
