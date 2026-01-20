@@ -319,13 +319,14 @@ body::before {
    MESSAGES CONTAINER
    ============================================ */
 .messages-container {
-    padding: 16px 16px 2px; /* Removed top padding */
+    padding: 16px 16px 2px;
     position: relative;
     z-index: 1;
-    flex: 1;
-    overflow-y: auto; /* Added */
-    overflow-x: hidden; /* Added */
-    -webkit-overflow-scrolling: touch; /* Added for smooth iOS scrolling */
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
 }
 /* ============================================
    MESSAGE CARDS
