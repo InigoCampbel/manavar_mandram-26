@@ -69,6 +69,13 @@ function setupEventListeners() {
         messageInput.style.height = messageInput.scrollHeight + 'px';
     });
 
+    // Handle mobile keyboard - scroll input into view
+    messageInput.addEventListener('focus', () => {
+        setTimeout(() => {
+            messageInput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 300);
+    });
+
 
 
     // Refresh when user returns to tab
