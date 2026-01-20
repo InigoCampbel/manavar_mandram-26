@@ -214,15 +214,11 @@ body::before {
 #mainScreen {
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    height: 100dvh;
+    height: 100dvh; /* Changed from min-height to height, using dvh */
+    height: 100vh; /* Fallback for older browsers */
     background: var(--bg-primary);
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    overflow: hidden;
+    position: relative;
+    overflow: hidden; /* Added */
 }
 
 /* ============================================
