@@ -10,6 +10,8 @@ let isAdmin = false;
 let messages = [];
 let userVotes = {};
 let sortByVotes = false;
+let pollingInterval = null;
+let lastMessageCount = 0;
 
 // Touch swipe state
 let touchStartX = 0;
@@ -70,22 +72,20 @@ function setupEventListeners() {
     // Add keyboard handling for mobile
     const handleInputScroll = () => {
         setTimeout(() => {
-            const inputRect = messageInput.getBoundingClientRect();
-            const viewportHeight = window.visualViewport?.height || window.innerHeight;
-            const scrollNeeded = inputRect.bottom - viewportHeight + 150; // 150px clearance
-            
-            if (scrollNeeded > 0) {
-                window.scrollBy({
-                    top: scrollNeeded,
-                    behavior: 'smooth'
-                });
-            }
-        }, 300);
+            // Scroll the messages container to bottom to reveal input
+            messagesContainer.scrollTop = messagesContainer.scrollHeight + 200;
+        }, 100);
     };
 
     messageInput.addEventListener('focus', handleInputScroll);
     messageInput.addEventListener('click', handleInputScroll);
     messageInput.addEventListener('touchstart', handleInputScroll);
+    // Refresh when user returns to tab
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && currentUser) {
+            silentRefresh();
+        }
+    });
     
 }
 
@@ -136,6 +136,12 @@ async function checkAdminStatus() {
 // Handle Logout
 function handleLogout() {
     if (confirm('Are you sure you want to logout?')) {
+        // Stop polling
+        if (pollingInterval) {
+            clearInterval(pollingInterval);
+            pollingInterval = null;
+        }
+        
         localStorage.removeItem('discussionUser');
         currentUser = null;
         isAdmin = false;
@@ -162,6 +168,12 @@ function showMainScreen() {
     loadMessages();
     setupRealtime();
     loadUserVotes();
+    
+    // Start background polling every 15 seconds
+    if (pollingInterval) {
+        clearInterval(pollingInterval);
+    }
+    pollingInterval = setInterval(silentRefresh, 15000);
 }
 
 // Load all messages
@@ -188,6 +200,68 @@ async function loadMessages() {
         console.error('Error loading messages:', error);
     }
 }
+
+// Silent background refresh - checks for new messages without disrupting UI
+async function silentRefresh() {
+    // Don't refresh if user is actively typing
+    if (document.activeElement === messageInput) {
+        return;
+    }
+    
+    try {
+        const { data, error } = await supabaseClient
+            .from('messages')
+            .select(`
+                *,
+                votes (vote_type)
+            `)
+            .order('created_at', { ascending: true });
+        
+        if (error) throw error;
+        
+        // Check if there are actually new messages
+        if (data.length === messages.length) {
+            return; // No new messages, skip update
+        }
+        
+        const wasAtBottom = isScrolledToBottom();
+        const scrollPos = messagesContainer.scrollTop;
+        
+        // Create a map of existing message IDs for quick lookup
+        const existingIds = new Set(messages.map(m => m.id));
+        
+        // Process new data
+        const newMessages = data.map(msg => ({
+            ...msg,
+            upvotes: msg.votes.filter(v => v.vote_type === 'upvote').length,
+            downvotes: msg.votes.filter(v => v.vote_type === 'downvote').length
+        }));
+        
+        // Only add truly new messages
+        const addedMessages = newMessages.filter(msg => !existingIds.has(msg.id));
+        
+        if (addedMessages.length > 0) {
+            // Merge new messages
+            messages = newMessages;
+            lastMessageCount = messages.length;
+            
+            // Render without disrupting scroll
+            renderMessages();
+            
+            // Restore exact scroll position (only auto-scroll if user was at bottom)
+            if (wasAtBottom) {
+                scrollToBottom();
+            } else {
+                messagesContainer.scrollTop = scrollPos;
+            }
+        }
+        
+    } catch (error) {
+        console.error('Silent refresh error:', error);
+        // Fail silently - don't alert user
+    }
+}
+
 
 // Load user's votes
 async function loadUserVotes() {
