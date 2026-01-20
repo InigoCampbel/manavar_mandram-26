@@ -68,11 +68,24 @@ function setupEventListeners() {
     });
 
     // Add keyboard handling for mobile
-    messageInput.addEventListener('focus', () => {
+    const handleInputScroll = () => {
         setTimeout(() => {
-            messageInput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            const inputRect = messageInput.getBoundingClientRect();
+            const viewportHeight = window.visualViewport?.height || window.innerHeight;
+            const scrollNeeded = inputRect.bottom - viewportHeight + 150; // 150px clearance
+            
+            if (scrollNeeded > 0) {
+                window.scrollBy({
+                    top: scrollNeeded,
+                    behavior: 'smooth'
+                });
+            }
         }, 300);
-    });
+    };
+
+    messageInput.addEventListener('focus', handleInputScroll);
+    messageInput.addEventListener('click', handleInputScroll);
+    messageInput.addEventListener('touchstart', handleInputScroll);
     
 }
 
