@@ -69,6 +69,17 @@ function setupEventListeners() {
         messageInput.style.height = messageInput.scrollHeight + 'px';
     });
 
+    // Handle keyboard for mobile
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', () => {
+            const inputBar = document.querySelector('.input-bar');
+            const viewportHeight = window.visualViewport.height;
+            const offset = window.innerHeight - viewportHeight;
+            inputBar.style.transform = `translateY(-${offset}px)`;
+        });
+    }
+
+
     // Refresh when user returns to tab
     document.addEventListener('visibilitychange', () => {
         if (!document.hidden && currentUser) {
