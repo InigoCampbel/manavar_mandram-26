@@ -214,11 +214,22 @@ body::before {
 #mainScreen {
     display: flex;
     flex-direction: column;
-    height: 100dvh; /* Changed from min-height to height, using dvh */
-    height: 100vh; /* Fallback for older browsers */
+    height: 100vh;
+    height: 100dvh;
+    max-height: -webkit-fill-available;
     background: var(--bg-primary);
-    position: relative;
-    overflow: hidden; /* Added */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+@supports (-webkit-touch-callout: none) {
+    #mainScreen {
+        height: -webkit-fill-available;
+    }
 }
 
 /* ============================================
