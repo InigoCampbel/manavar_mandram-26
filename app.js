@@ -61,16 +61,17 @@ function setupEventListeners() {
         if (e.key === 'Enter') handleLogin();
     });
     
-    messageInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            handleSendMessage();
-        }
-    });
     
     messageInput.addEventListener('input', () => {
         messageInput.style.height = 'auto';
         messageInput.style.height = messageInput.scrollHeight + 'px';
+    });
+
+    // Add keyboard handling for mobile
+    messageInput.addEventListener('focus', () => {
+        setTimeout(() => {
+            messageInput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 300);
     });
     
 }
