@@ -308,7 +308,7 @@ body::before {
    MESSAGES CONTAINER
    ============================================ */
 .messages-container {
-    padding: 16px 16px 50px; /* Removed top padding */
+    padding: 16px 16px 25px; /* Removed top padding */
     position: relative;
     z-index: 1;
     flex: 1;
@@ -553,5 +553,6 @@ body::-webkit-scrollbar-thumb:hover {
 .message-card {
     -webkit-tap-highlight-color: transparent;
 }
+
 
 
