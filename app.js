@@ -73,9 +73,6 @@ function setupEventListeners() {
         messageInput.style.height = messageInput.scrollHeight + 'px';
     });
     
-    rollInput.addEventListener('input', (e) => {
-        e.target.value = e.target.value.replace(/[^0-9]/g, '');
-    });
 }
 
 // Handle Login
@@ -88,8 +85,15 @@ async function handleLogin() {
         return;
     }
     
+    // Update this validation:
     if (roll.length !== 8) {
         alert('Roll number must be exactly 8 digits');
+        return;
+    }
+    
+    // To this:
+    if (roll.length !== 8) {
+        alert('Roll number must be exactly 8 characters');
         return;
     }
     
