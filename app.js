@@ -241,10 +241,8 @@ async function silentRefresh() {
             
             // Restore exact scroll position (only auto-scroll if user was at bottom)
             if (wasAtBottom) {
-    scrollToBottom();
-} else {
-    messagesContainer.scrollTo(0, scrollPos);
-}
+                scrollToBottom();
+            }
         }
         
     } catch (error) {
@@ -394,10 +392,8 @@ function renderMessages() {
     });
     
     if (wasAtBottom) {
-    scrollToBottom();
-} else {
-    messagesContainer.scrollTo(0, scrollPos);
-}
+        scrollToBottom();
+    } 
 }
 
 // Create message HTML
