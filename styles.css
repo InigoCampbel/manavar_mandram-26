@@ -100,7 +100,7 @@ body::before {
 }
 
 .loading-text {
-    font-size: 14px;
+    font-size: 40px;
     font-weight: 500;
     color: var(--text-secondary);
     letter-spacing: -0.01em;
@@ -130,11 +130,10 @@ body::before {
 
 .logo-icon {
     color: var(--accent);
-    margin-bottom: 16px;
 }
 
 .logo-section h1 {
-    font-size: 24px;
+    font-size: 40px;
     font-weight: 600;
     margin-bottom: 4px;
     letter-spacing: -0.02em;
@@ -142,7 +141,7 @@ body::before {
 }
 
 .subtitle {
-    font-size: 14px;
+    font-size: 20px;
     color: var(--text-secondary);
     font-weight: 400;
 }
@@ -153,7 +152,7 @@ body::before {
 
 .input-group label {
     display: block;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 500;
     margin-bottom: 6px;
     color: var(--text-secondary);
@@ -165,7 +164,7 @@ body::before {
     padding: 12px 14px;
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    font-size: 15px;
+    font-size: 18px;
     font-weight: 400;
     background: var(--bg-secondary);
     transition: all 0.15s ease;
@@ -189,7 +188,7 @@ body::before {
     color: #FFFFFF;
     border: none;
     border-radius: var(--radius-sm);
-    font-size: 14px;
+    font-size: 20px;
     font-weight: 500;
     cursor: pointer;
     display: flex;
@@ -333,7 +332,7 @@ body::before {
 }
 
 .message-content {
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.5;
     padding: 10px 14px 24px;
     border-radius: var(--radius);
@@ -348,6 +347,7 @@ body::before {
 
 /* Admin message bubble */
 .message-card.question .message-content {
+    font-size: 20px;
     background: var(--accent);
     color: #FFFFFF;
     border-bottom-left-radius: 4px;
@@ -454,7 +454,7 @@ body::before {
     background: var(--bg-primary);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 8px;
+    padding: 10px;
     transition: all 0.15s ease;
 }
 
@@ -467,7 +467,7 @@ body::before {
     flex: 1;
     border: none;
     background: transparent;
-    font-size: 14px;
+    font-size: 18px;
     font-family: inherit;
     resize: none;
     max-height: 120px;
