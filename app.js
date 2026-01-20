@@ -65,16 +65,11 @@ function setupEventListeners() {
     
     
     messageInput.addEventListener('input', () => {
-        messageInput.style.height = 'auto';
-        messageInput.style.height = messageInput.scrollHeight + 'px';
-    });
+    messageInput.style.height = 'auto';
+    const newHeight = Math.min(messageInput.scrollHeight, 120);
+    messageInput.style.height = newHeight + 'px';
+});
 
-    // Handle mobile keyboard - scroll input into view
-    messageInput.addEventListener('focus', () => {
-        setTimeout(() => {
-            messageInput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 300);
-    });
 
 
 
