@@ -312,7 +312,6 @@ body::before {
    ============================================ */
 .messages-container {
     flex: 1;
-    padding: 77px 16px 100px;
     position: relative;
     z-index: 1;
     overflow-y: auto;
@@ -561,3 +560,4 @@ body::before {
 .message-card {
     -webkit-tap-highlight-color: transparent;
 }
+
