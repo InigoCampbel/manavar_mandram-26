@@ -454,7 +454,7 @@ body::before {
     position: relative;
     background: var(--bg-secondary);
     padding: 12px 20px;
-    padding-bottom: max(52px, calc(52px + env(safe-area-inset-bottom)));
+    padding-bottom: calc(12px + env(safe-area-inset-bottom));
     border-top: 1px solid var(--border);
     z-index: 100;
     flex-shrink: 0;
