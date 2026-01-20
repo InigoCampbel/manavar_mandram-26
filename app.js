@@ -69,17 +69,6 @@ function setupEventListeners() {
         messageInput.style.height = messageInput.scrollHeight + 'px';
     });
 
-    // Add keyboard handling for mobile
-    const handleInputScroll = () => {
-        setTimeout(() => {
-            // Scroll the messages container to bottom to reveal input
-            messagesContainer.scrollTop = messagesContainer.scrollHeight + 200;
-        }, 100);
-    };
-
-    messageInput.addEventListener('focus', handleInputScroll);
-    messageInput.addEventListener('click', handleInputScroll);
-    messageInput.addEventListener('touchstart', handleInputScroll);
     // Refresh when user returns to tab
     document.addEventListener('visibilitychange', () => {
         if (!document.hidden && currentUser) {
@@ -252,7 +241,7 @@ async function silentRefresh() {
             if (wasAtBottom) {
                 scrollToBottom();
             } else {
-                messagesContainer.scrollTop = scrollPos;
+                window.scrollTo(0, scrollPos);
             }
         }
         
@@ -405,7 +394,7 @@ function renderMessages() {
     if (wasAtBottom) {
         scrollToBottom();
     } else {
-        messagesContainer.scrollTop = scrollPos;
+        window.scrollTo(0, scrollPos);
     }
 }
 
@@ -633,13 +622,16 @@ async function handleVote(messageId, voteType) {
 // Utility functions
 function isScrolledToBottom() {
     const threshold = 150;
-    const position = messagesContainer.scrollTop + messagesContainer.clientHeight;
-    const height = messagesContainer.scrollHeight;
+    const position = window.scrollY + window.innerHeight;
+    const height = document.documentElement.scrollHeight;
     return position >= height - threshold;
 }
 
 function scrollToBottom() {
     setTimeout(() => {
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth'
+        });
     }, 100);
 }
