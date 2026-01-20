@@ -69,15 +69,6 @@ function setupEventListeners() {
         messageInput.style.height = messageInput.scrollHeight + 'px';
     });
 
-    // Handle keyboard for mobile
-    if (window.visualViewport) {
-        window.visualViewport.addEventListener('resize', () => {
-            const inputBar = document.querySelector('.input-bar');
-            const viewportHeight = window.visualViewport.height;
-            const offset = window.innerHeight - viewportHeight;
-            inputBar.style.transform = `translateY(-${offset}px)`;
-        });
-    }
 
 
     // Refresh when user returns to tab
@@ -252,7 +243,7 @@ async function silentRefresh() {
             if (wasAtBottom) {
                 scrollToBottom();
             } else {
-                messagesContainer.scrollTop = scrollPos;
+                window.scrollTo(0, scrollPos);
             }
         }
         
@@ -405,7 +396,7 @@ function renderMessages() {
     if (wasAtBottom) {
         scrollToBottom();
     } else {
-        messagesContainer.scrollTop = scrollPos;
+        window.scrollTo(0, scrollPos);
     }
 }
 
@@ -633,13 +624,16 @@ async function handleVote(messageId, voteType) {
 // Utility functions
 function isScrolledToBottom() {
     const threshold = 150;
-    const position = messagesContainer.scrollTop + messagesContainer.clientHeight;
-    const height = messagesContainer.scrollHeight;
+    const position = window.scrollY + window.innerHeight;
+    const height = document.documentElement.scrollHeight;
     return position >= height - threshold;
 }
 
 function scrollToBottom() {
     setTimeout(() => {
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth'
+        });
     }, 100);
 }
