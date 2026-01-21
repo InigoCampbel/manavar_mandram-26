@@ -399,23 +399,21 @@ function createMessageHTML(msg) {
     const isQuestion = msg.is_question;
     
     return `
-        <div class="message-card ${isQuestion ? 'question' : ''}" data-id="${msg.id}" ${!isQuestion ? `data-user-message="true" ${userVote === 'upvote' ? 'data-voted="true"' : ''}` : 'data-admin-message="true"'}>
-            <div class="message-content">
-                ${msg.content}
-                <div class="message-bottom-bar">
-                    <div class="message-author-attribution">${msg.name}</div>
-                    ${!isQuestion ? `
-                        <div class="vote-section">
-                            <svg class="vote-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                <polyline points="18 15 12 9 6 15"></polyline>
-                            </svg>
-                            <span class="vote-count">${msg.upvotes}</span>
-                        </div>
-                    ` : ''}
-                </div>
+    <div class="message-card ${isQuestion ? 'question' : ''}" data-id="${msg.id}" ${!isQuestion ? `data-user-message="true" ${userVote === 'upvote' ? 'data-voted="true"' : ''}` : 'data-admin-message="true"'}>
+        <div class="message-content">${msg.content}<div class="message-bottom-bar">
+                <div class="message-author-attribution">${msg.name}</div>
+                ${!isQuestion ? `
+                    <div class="vote-section">
+                        <svg class="vote-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polyline points="18 15 12 9 6 15"></polyline>
+                        </svg>
+                        <span class="vote-count">${msg.upvotes}</span>
+                    </div>
+                ` : ''}
             </div>
         </div>
-    `;
+    </div>
+`;
 }
 
 // Attach event listeners to message elements with swipe gestures
