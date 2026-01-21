@@ -438,14 +438,34 @@ body::before {
    INPUT BAR
    ============================================ */
 .input-bar {
-    position: sticky;
-    bottom: 0;
     background: var(--bg-secondary);
     padding: 12px 16px;
     padding-bottom: max(12px, env(safe-area-inset-bottom));
     border-top: 1px solid var(--border);
     z-index: 100;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Fixed input bar only on desktop */
+@media (min-width: 769px) {
+    .input-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+    
+    .messages-container {
+        padding-bottom: 80px;
+    }
+}
+
+/* Mobile - sticky behavior */
+@media (max-width: 768px) {
+    .input-bar {
+        position: sticky;
+        bottom: 0;
+    }
 }
 
 
@@ -555,5 +575,6 @@ body::-webkit-scrollbar-thumb:hover {
 .message-card {
     -webkit-tap-highlight-color: transparent;
 }
+
 
 
