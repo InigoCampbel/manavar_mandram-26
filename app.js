@@ -436,9 +436,12 @@ function attachMessageListeners(msg) {
     // Long press to delete (admin only)
     if (isAdmin) {
         let pressTimer;
+        let touchHandled = false;
         
         const startPress = (e) => {
+            touchHandled = false;
             pressTimer = setTimeout(() => {
+                touchHandled = true;
                 handleDeleteMessage(msg.id);
             }, 600);
         };
@@ -447,13 +450,18 @@ function attachMessageListeners(msg) {
             clearTimeout(pressTimer);
         };
         
+        // Mobile - long press
         messageCard.addEventListener('touchstart', startPress);
         messageCard.addEventListener('touchend', cancelPress);
         messageCard.addEventListener('touchmove', cancelPress);
         
+        // Desktop - right-click (only if not touch device)
         messageCard.addEventListener('contextmenu', (e) => {
             e.preventDefault();
-            handleDeleteMessage(msg.id);
+            // Don't trigger if this was a touch event
+            if (!touchHandled) {
+                handleDeleteMessage(msg.id);
+            }
         });
     }
 }
@@ -627,3 +635,4 @@ function scrollToBottom() {
         });
     }, 100);
 }
+
