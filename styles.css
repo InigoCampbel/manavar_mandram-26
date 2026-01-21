@@ -307,11 +307,12 @@ body::before {
    ============================================ */
 .messages-container {
     padding: 16px;
-    padding-bottom: 16px; /* Normal padding */
+    padding-bottom: 16px; /* Changed from 50px */
     position: relative;
     z-index: 1;
     flex: 1;
-    overflow-y: auto; /* Add this to make it scrollable */
+    overflow-y: auto; /* ADD THIS - Makes it scrollable */
+    overflow-x: hidden;
 }
 /* ============================================
    MESSAGE CARDS
@@ -540,7 +541,7 @@ body::-webkit-scrollbar-thumb:hover {
     }
     
     .messages-container {
-        padding: 16px 12px 16px;
+        padding: 16px 12px 16px; /* Changed from 120px */
     }
 }
 
@@ -554,4 +555,5 @@ body::-webkit-scrollbar-thumb:hover {
 .message-card {
     -webkit-tap-highlight-color: transparent;
 }
+
 
