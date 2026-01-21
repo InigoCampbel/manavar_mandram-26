@@ -421,11 +421,6 @@ function attachMessageListeners(msg) {
     const messageCard = messagesContainer.querySelector(`.message-card[data-id="${msg.id}"]`);
     if (!messageCard) return;
     
-    // Swipe gesture handlers
-    messageCard.addEventListener('touchstart', handleTouchStart, { passive: true });
-    messageCard.addEventListener('touchmove', handleTouchMove, { passive: false });
-    messageCard.addEventListener('touchend', (e) => handleTouchEnd(e, msg), { passive: true });
-    
     // Desktop fallback - double click to vote on user messages
     if (!msg.is_question) {
         messageCard.addEventListener('dblclick', () => {
@@ -438,7 +433,7 @@ function attachMessageListeners(msg) {
         let pressTimer;
         let touchHandled = false;
         
-        const startPress = (e) => {
+        const startLongPress = (e) => {
             touchHandled = false;
             pressTimer = setTimeout(() => {
                 touchHandled = true;
@@ -446,16 +441,33 @@ function attachMessageListeners(msg) {
             }, 600);
         };
         
-        const cancelPress = () => {
+        const cancelLongPress = () => {
             clearTimeout(pressTimer);
         };
         
-        // Mobile - long press
-        messageCard.addEventListener('touchstart', startPress);
-        messageCard.addEventListener('touchend', cancelPress);
-        messageCard.addEventListener('touchmove', cancelPress);
+        // Mobile - long press (separate from swipe handlers)
+        messageCard.addEventListener('touchstart', (e) => {
+            // Start long press timer
+            startLongPress(e);
+            // Also handle swipe detection
+            handleTouchStart(e);
+        }, { passive: true });
         
-        // Desktop - right-click (only if not touch device)
+        messageCard.addEventListener('touchmove', (e) => {
+            // Cancel long press on move
+            cancelLongPress();
+            // Handle swipe
+            handleTouchMove(e);
+        }, { passive: false });
+        
+        messageCard.addEventListener('touchend', (e) => {
+            // Cancel long press
+            cancelLongPress();
+            // Handle swipe end
+            handleTouchEnd(e, msg);
+        }, { passive: true });
+        
+        // Desktop - right-click
         messageCard.addEventListener('contextmenu', (e) => {
             e.preventDefault();
             // Don't trigger if this was a touch event
@@ -463,6 +475,11 @@ function attachMessageListeners(msg) {
                 handleDeleteMessage(msg.id);
             }
         });
+    } else {
+        // Non-admin users - just swipe gestures
+        messageCard.addEventListener('touchstart', handleTouchStart, { passive: true });
+        messageCard.addEventListener('touchmove', handleTouchMove, { passive: false });
+        messageCard.addEventListener('touchend', (e) => handleTouchEnd(e, msg), { passive: true });
     }
 }
 
@@ -635,4 +652,5 @@ function scrollToBottom() {
         });
     }, 100);
 }
+
 
